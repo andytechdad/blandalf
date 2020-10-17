@@ -8,11 +8,22 @@ class DataManager(context: Context) {
 
     private val gwdb : SQLiteDatabase = context.openOrCreateDatabase("GamesWorkshopDatabase", Context.MODE_PRIVATE, null)
 
+
+
     init {
+
+        val createOptionTypesQuery = "CREATE TABLE IF NOT EXISTS \"option_types\" (\n" +
+                "\t\"option_type_id\"\tINTEGER NOT NULL,\n" +
+                "\t\"option_type_name\"\tTEXT NOT NULL,\n" +
+                "\tPRIMARY KEY(\"option_type_id\")\n" +
+                ");"
+
         val createOptionsQuery = "CREATE TABLE IF NOT EXISTS \"hero_options\" (\n" +
                 "\t\"option_id\"\tINTEGER NOT NULL,\n" +
                 "\t\"option_name\"\tTEXT NOT NULL,\n" +
                 "\t\"option_points\"\tINTEGER NOT NULL,\n" +
+                "\t\"option_type\"\tINTEGER,\n" +
+                "\tFOREIGN KEY(\"option_type\") REFERENCES \"option_types\"(\"option_type_id\"),\n" +
                 "\tPRIMARY KEY(\"option_id\")\n" +
                 ");"
 
@@ -53,20 +64,23 @@ class DataManager(context: Context) {
                 "\t\"hero_option_1\"\tINTEGER,\n" +
                 "\t\"hero_option_2\"\tINTEGER,\n" +
                 "\t\"hero_option_3\"\tINTEGER,\n" +
-                "\tFOREIGN KEY(\"hero_keyword_4\") REFERENCES \"hero_keywords\"(\"keyword_id\"),\n" +
+                "\t\"hero_option_4\"\tINTEGER,\n" +
+                "\t\"hero_option_5\"\tINTEGER,\n" +
+                "\tFOREIGN KEY(\"hero_option_4\") REFERENCES \"hero_options\"(\"option_id\"),\n" +
                 "\tFOREIGN KEY(\"hero_keyword_2\") REFERENCES \"hero_keywords\"(\"keyword_id\"),\n" +
-                "\tFOREIGN KEY(\"hero_option_2\") REFERENCES \"hero_options\"(\"option_id\"),\n" +
-                "\tFOREIGN KEY(\"hero_option_3\") REFERENCES \"hero_options\"(\"option_id\"),\n" +
-                "\tFOREIGN KEY(\"hero_type\") REFERENCES \"hero_types\"(\"type_id\"),\n" +
-                "\tFOREIGN KEY(\"hero_keyword_3\") REFERENCES \"hero_keywords\"(\"keyword_id\"),\n" +
+                "\tFOREIGN KEY(\"hero_keyword_4\") REFERENCES \"hero_keywords\"(\"keyword_id\"),\n" +
                 "\tFOREIGN KEY(\"hero_keyword_5\") REFERENCES \"hero_keywords\"(\"keyword_id\"),\n" +
-                "\tFOREIGN KEY(\"hero_keyword_1\") REFERENCES \"hero_keywords\"(\"keyword_id\"),\n" +
                 "\tFOREIGN KEY(\"hero_option_1\") REFERENCES \"hero_options\"(\"option_id\"),\n" +
+                "\tFOREIGN KEY(\"hero_type\") REFERENCES \"hero_types\"(\"type_id\"),\n" +
+                "\tFOREIGN KEY(\"hero_option_5\") REFERENCES \"hero_options\"(\"option_id\"),\n" +
+                "\tFOREIGN KEY(\"hero_keyword_1\") REFERENCES \"hero_keywords\"(\"keyword_id\"),\n" +
+                "\tFOREIGN KEY(\"hero_keyword_3\") REFERENCES \"hero_keywords\"(\"keyword_id\"),\n" +
+                "\tFOREIGN KEY(\"hero_option_3\") REFERENCES \"hero_options\"(\"option_id\"),\n" +
+                "\tFOREIGN KEY(\"hero_option_2\") REFERENCES \"hero_options\"(\"option_id\"),\n" +
                 "\tPRIMARY KEY(\"hero_id\")\n" +
                 ");"
 
-        val insertMithrilCoatQuery = "INSERT INTO \"hero_options\" VALUES (1,'Mithril Coat',15);"
-
+        gwdb.execSQL(createOptionTypesQuery)
         gwdb.execSQL(createOptionsQuery)
         gwdb.execSQL(createTypesQuery)
         gwdb.execSQL(createKeyWordsQuery)
