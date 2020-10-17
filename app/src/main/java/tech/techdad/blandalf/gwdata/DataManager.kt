@@ -8,8 +8,6 @@ class DataManager(context: Context) {
 
     private val gwdb : SQLiteDatabase = context.openOrCreateDatabase("GamesWorkshopDatabase", Context.MODE_PRIVATE, null)
 
-
-
     init {
 
         val createOptionTypesQuery = "CREATE TABLE IF NOT EXISTS \"option_types\" (\n" +
@@ -87,4 +85,5 @@ class DataManager(context: Context) {
         gwdb.execSQL(createHeroesQuery)
 
     }
+
 }
